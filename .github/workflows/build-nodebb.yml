@@ -1,0 +1,30 @@
+on:
+  pull_request:
+    branches: [ master ]
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+    name: Build latest NodeBB
+    runs-on: ubuntu-latest
+    steps:
+      - id: NodeBB
+        uses: pozetroninc/github-action-get-latest-release@master
+        with:
+            owner: NodeBB
+            repo: NodeBB
+      - uses: actions/checkout@v2
+
+      - name: Build and publish Docker image
+        uses: elgohr/Publish-Docker-Github-Action@master
+        env:
+          RELEASE: ${{ steps.NodeBB.outputs.release }}
+        with:
+         name: ${{github.repository}}/nodebb
+         registry: docker.pkg.github.com
+         username: "rez0n"
+         password: ${{ secrets.GITHUB_TOKEN }}
+         dockerfile: Dockerfile
+         buildargs: RELEASE
+         tags: latest, ${{ steps.NodeBB.outputs.release }}
