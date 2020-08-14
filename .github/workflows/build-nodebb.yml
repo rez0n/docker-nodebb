@@ -9,14 +9,15 @@ jobs:
     name: Build latest NodeBB
     runs-on: ubuntu-latest
     steps:
-      - id: NodeBB
+      - id: NodeBB-stable
         uses: pozetroninc/github-action-get-latest-release@master
         with:
             owner: NodeBB
             repo: NodeBB
+            excludes: prerelease, draft
       - uses: actions/checkout@v2
 
-      - name: Build and publish Docker image
+      - name: Build and publish Docker image (latest)
         uses: elgohr/Publish-Docker-Github-Action@master
         env:
           RELEASE: ${{ steps.NodeBB.outputs.release }}
@@ -27,4 +28,24 @@ jobs:
          password: ${{ secrets.GITHUB_TOKEN }}
          dockerfile: Dockerfile
          buildargs: RELEASE
-         tags: latest, ${{ steps.NodeBB.outputs.release }}
+         tags: latest, stable, ${{ steps.NodeBB-stable.outputs.release }}
+
+      - id: NodeBB-beta
+        uses: pozetroninc/github-action-get-latest-release@master
+        with:
+            owner: NodeBB
+            repo: NodeBB
+      - uses: actions/checkout@v2
+
+      - name: Build and publish Docker image (beta)
+        uses: elgohr/Publish-Docker-Github-Action@master
+        env:
+          RELEASE: ${{ steps.NodeBB.outputs.release }}
+        with:
+         name: ${{github.repository}}/nodebb
+         registry: docker.pkg.github.com
+         username: "rez0n"
+         password: ${{ secrets.GITHUB_TOKEN }}
+         dockerfile: Dockerfile
+         buildargs: RELEASE
+         tags: beta, ${{ steps.NodeBB-beta.outputs.release }}
