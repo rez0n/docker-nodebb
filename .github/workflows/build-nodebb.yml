@@ -20,7 +20,7 @@ jobs:
       - name: Build and publish Docker image (latest)
         uses: elgohr/Publish-Docker-Github-Action@master
         env:
-          RELEASE: ${{ steps.NodeBB.outputs.release }}
+          RELEASE: ${{ steps.NodeBB-stable.outputs.release }}
         with:
          name: ${{github.repository}}/nodebb
          registry: docker.pkg.github.com
@@ -40,7 +40,7 @@ jobs:
       - name: Build and publish Docker image (beta)
         uses: elgohr/Publish-Docker-Github-Action@master
         env:
-          RELEASE: ${{ steps.NodeBB.outputs.release }}
+          RELEASE: ${{ steps.NodeBB-beta.outputs.release }}
         with:
          name: ${{github.repository}}/nodebb
          registry: docker.pkg.github.com
