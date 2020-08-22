@@ -1,0 +1,109 @@
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: nodebb-pv
+  namespace: nodebb
+  labels:
+    type: local
+spec:
+  storageClassName: local-path
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: "/home/nodebb-pv"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nodebb-pv-claim
+  namespace: nodebb
+  labels:
+    app: nodebb
+spec:
+  storageClassName: local-path
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 5Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nodebb
+  namespace: nodebb
+  labels:
+    app: nodebb
+spec:
+  selector:
+    matchLabels:
+      app: nodebb
+      tier: frontend
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: nodebb
+        tier: frontend
+    spec:
+      containers:
+        - image: nibrev/nodebb:beta
+          imagePullPolicy: Always
+          name: nodebb
+          env:
+            - name: DATABASE
+              value: "redis"
+            - name: DB_NAME
+              value: "1"
+            - name: DB_HOST
+              value: redis
+            - name: DB_PORT
+              value: "6379"
+            - name: URL
+              value: "http://node.138.201.26.107.nip.io"
+          ports:
+            - containerPort: 4567
+              name: nodebb
+          volumeMounts:
+            - name: nodebb-pv
+              mountPath: /data
+      volumes:
+        - name: nodebb-pv
+          persistentVolumeClaim:
+            claimName: beta-nodebb-pv-claim
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nodebb
+  namespace: nodebb
+  labels:
+    app: nodebb
+spec:
+  selector:
+    app: nodebb
+    tier: frontend
+  ports:
+    - port: 80
+      targetPort: 4567
+
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: nodebb
+  namespace: nodebb
+spec:
+  rules:
+    - host: node.138.201.26.107.nip.io
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: nodebb
+              servicePort: 80
