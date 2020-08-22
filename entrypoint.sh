@@ -6,9 +6,9 @@ if ! [ -e config.json ]; then
     if [ -n "$DATABASE" ]; then
 
         if [ "$DATABASE" == "redis" ]; then
-            database=$DATABASE redis__database=$DB_NAME redis__password=$DB_PASSWORD redis__host=$DB_HOST redis__port=$DB_PORT node app --setup
+            url=$URL database=$DATABASE redis__database=$DB_NAME redis__password=$DB_PASSWORD redis__host=$DB_HOST redis__port=$DB_PORT node app --setup
         elif [ "$DATABASE" == "mongo" ]; then
-            database=$DATABASE mongo__username=$DB_USER mongo__password=$DB_PASSWORD mongo__host=$DB_HOST mongo__port=$DB_PORT node app --setup
+            url=$URL database=$DATABASE mongo__username=$DB_USER mongo__password=$DB_PASSWORD mongo__host=$DB_HOST mongo__port=$DB_PORT node app --setup
         fi
 
     else
