@@ -1,9 +1,9 @@
 # NodeBB in the Docker
 [NodeBB](https://github.com/NodeBB/NodeBB) forum software Docker container.
 ## Available tags
-`latest` - used for latest *beta* releases (autobuilds)
+`latest` - used for latest *stable* releases
 
-`stable` - *stable* releases builds (currntly manual maintained)
+`beta` - *beta* releases builds
 
 ---
 
@@ -21,7 +21,7 @@
 ```
 docker run --name nodebb -d -p 4567:4567 \
     -v /path/to/data:/data \
-	-e URL="http://mynodebb.com" \
+    -e URL="http://mynodebb.com" \
     -e DATABASE="mongo" \
     -e DB_HOST="host.docker.internal" \
     -e DB_USER="user" \
@@ -35,7 +35,7 @@ docker run --name nodebb -d -p 4567:4567 \
 ```
 docker run --name nodebb -d -p 4567:4567 \
     -v /path/to/data:/data \
-	-e URL="http://mynodebb.com" \
+    -e URL="http://mynodebb.com" \
     -e DATABASE="redis" \
     -e DB_NAME="0" \
     -e DB_HOST="host.docker.internal" \
