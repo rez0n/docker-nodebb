@@ -17,7 +17,7 @@ jobs:
             excludes: prerelease, draft
       - uses: actions/checkout@v2
 
-      - name: Build and publish Docker image (latest)
+      - name: Build and publish on Github (stable)
         uses: elgohr/Publish-Docker-Github-Action@master
         env:
           RELEASE: ${{ steps.NodeBB-stable.outputs.release }}
@@ -30,6 +30,19 @@ jobs:
          buildargs: RELEASE
          tags: latest, stable, ${{ steps.NodeBB-stable.outputs.release }}
 
+      - name: Build and publish on DockerHub (stable)
+        uses: elgohr/Publish-Docker-Github-Action@master
+        env:
+          RELEASE: ${{ steps.NodeBB-stable.outputs.release }}
+        with:
+         name: nibrev/nodebb
+         registry: registry.hub.docker.com
+         username: "nibrev"
+         password: ${{ secrets.DOCKERHUB_TOKEN }}
+         dockerfile: Dockerfile
+         buildargs: RELEASE
+         tags: latest, stable, ${{ steps.NodeBB-stable.outputs.release }}
+
       - id: NodeBB-beta
         uses: pozetroninc/github-action-get-latest-release@master
         with:
@@ -37,7 +50,7 @@ jobs:
             repo: NodeBB
       - uses: actions/checkout@v2
 
-      - name: Build and publish Docker image (beta)
+      - name: Build and publish on Github (beta)
         uses: elgohr/Publish-Docker-Github-Action@master
         env:
           RELEASE: ${{ steps.NodeBB-beta.outputs.release }}
@@ -46,6 +59,19 @@ jobs:
          registry: docker.pkg.github.com
          username: "rez0n"
          password: ${{ secrets.GITHUB_TOKEN }}
+         dockerfile: Dockerfile
+         buildargs: RELEASE
+         tags: beta, ${{ steps.NodeBB-beta.outputs.release }}
+
+      - name: Build and publish on DockerHub (beta)
+        uses: elgohr/Publish-Docker-Github-Action@master
+        env:
+          RELEASE: ${{ steps.NodeBB-beta.outputs.release }}
+        with:
+         name: nibrev/nodebb
+         registry: registry.hub.docker.com
+         username: "nibrev"
+         password: ${{ secrets.DOCKERHUB_TOKEN }}
          dockerfile: Dockerfile
          buildargs: RELEASE
          tags: beta, ${{ steps.NodeBB-beta.outputs.release }}
