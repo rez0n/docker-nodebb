@@ -21,12 +21,12 @@
 ```
 docker run --name nodebb -d -p 4567:4567 \
     -v /path/to/data:/data \
-	-e DATABASE="mongo" \
-	-e DB_HOST="host.docker.internal" \
+    -e DATABASE="mongo" \
+    -e DB_HOST="host.docker.internal" \
     -e DB_USER="user" \
     -e DB_PASSWORD="pass" \
-	-e DB_PORT="27017" \
-	nibrev/nodebb:stable
+    -e DB_PORT="27017" \
+    nibrev/nodebb:stable
 ```
 
 ### Run using Redis
@@ -34,12 +34,12 @@ docker run --name nodebb -d -p 4567:4567 \
 ```
 docker run --name nodebb -d -p 4567:4567 \
     -v /path/to/data:/data \
-	-e DATABASE="redis" \
-	-e DB_NAME="0" \
-	-e DB_HOST="host.docker.internal" \
+    -e DATABASE="redis" \
+    -e DB_NAME="0" \
+    -e DB_HOST="host.docker.internal" \
     -e DB_PASSWORD="pass" \
-	-e DB_PORT="6379" \
-	nibrev/nodebb:stable
+    -e DB_PORT="6379" \
+    nibrev/nodebb:stable
 ```
 ---
 ## Known issues
