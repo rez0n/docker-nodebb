@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-if ! [ -e config.json ]; then
+if ! [ -e /data/config.json ]; then
 
     if [ -n "$DATABASE" ]; then
 
@@ -15,11 +15,29 @@ if ! [ -e config.json ]; then
         echo "Database setting is invalid"
     fi
 
-    mv config.json /data/config.json
-    ln -s /data/config.json /usr/src/app/config.json
+    mv config.json /data/config.json \
+    && ln -s /data/config.json /usr/src/app/config.json
+else
+    # Link config file (in cases when you recreated container)
+    if [ ! -e /usr/src/app/config.json ]; then
+        ln -s /data/config.json /usr/src/app/config.json
+    fi
+
+fi
+
+if [ ! -e /data/uploads ]; then
     mv /usr/src/app/public/uploads /data/uploads \
-    && ln -s /data/uploads /usr/src/app/public/uploads \
-    && mv /usr/src/app/package.json /data/package.json \
+    && ln -s /data/uploads /usr/src/app/public/uploads
+else
+    rm -rf /usr/src/app/public/uploads \
+    && ln -s /data/uploads /usr/src/app/public/uploads
+fi
+
+if [ ! -e /data/package.json ]; then
+    mv /usr/src/app/package.json /data/package.json \
+    && ln -s /data/package.json /usr/src/app/package.json
+else
+    rm /usr/src/app/package.json \
     && ln -s /data/package.json /usr/src/app/package.json
 fi
 
