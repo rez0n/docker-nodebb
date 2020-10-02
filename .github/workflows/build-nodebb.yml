@@ -21,10 +21,10 @@ jobs:
         env:
           RELEASE: ${{ steps.NodeBB-beta.outputs.release }}
         with:
-         name: ${{github.repository}}/nodebb
-         registry: docker.pkg.github.com
+         name: rez0n/nodebb
+         registry: ghcr.io
          username: "rez0n"
-         password: ${{ secrets.GITHUB_TOKEN }}
+         password: ${{ secrets.PAT }}
          dockerfile: Dockerfile
          buildargs: RELEASE
          tags: beta, ${{ steps.NodeBB-beta.outputs.release }}
@@ -60,10 +60,10 @@ jobs:
         env:
           RELEASE: ${{ steps.NodeBB-stable.outputs.release }}
         with:
-         name: ${{github.repository}}/nodebb
-         registry: docker.pkg.github.com
+         name: rez0n/nodebb
+         registry: ghcr.io
          username: "rez0n"
-         password: ${{ secrets.GITHUB_TOKEN }}
+         password: ${{ secrets.PAT }}
          dockerfile: Dockerfile
          buildargs: RELEASE
          tags: latest, stable, ${{ steps.NodeBB-stable.outputs.release }}
