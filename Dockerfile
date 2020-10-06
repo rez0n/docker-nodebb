@@ -1,5 +1,7 @@
 FROM node:10
 
+LABEL org.opencontainers.image.source https://github.com/rez0n/docker-nodebb
+
 ENV NODE_ENV=production \
     daemon=false \
     silent=false

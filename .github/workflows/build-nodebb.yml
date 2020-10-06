@@ -6,7 +6,7 @@ on:
 
 jobs:
   build-beta:
-    name: Build latest NodeBB
+    name: Build latest beta
     runs-on: ubuntu-latest
     steps:
       - id: NodeBB-beta
@@ -43,7 +43,7 @@ jobs:
          tags: beta, ${{ steps.NodeBB-beta.outputs.release }}
 
   build-stable:
-    name: Build latest NodeBB
+    name: Build latest stable
     runs-on: ubuntu-latest
     steps:
 
