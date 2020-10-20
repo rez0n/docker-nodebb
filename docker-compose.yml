@@ -1,0 +1,37 @@
+# docker-compose for local testing
+
+version: '3.1'
+services:
+  nodebb:
+    image: ghcr.io/rez0n/nodebb:beta
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile
+    #   args:
+    #     RELEASE: "v1.15.0-beta.29"
+    restart: unless-stopped
+    environment:
+      URL: "http://localhost"
+      DATABASE: "redis"
+      DB_NAME: "0"
+      DB_HOST: "redis"
+      # DB_PASSWORD: "nodebb"
+      DB_PORT: "6379"
+    volumes:
+      - ./data/nodebb:/data
+    networks:
+      - nodebb
+    ports:
+      - "4567:4567"
+
+  redis:
+    image: redis
+    restart: unless-stopped
+    volumes:
+      - ./data/redis:/data
+    networks:
+      - nodebb
+
+networks:
+  nodebb:
+    driver: bridge
