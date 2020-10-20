@@ -42,7 +42,7 @@ else
 fi
 
 if [ -f config.json ]; then
-    /usr/src/app/nodebb upgrade -sb
+    /usr/src/app/nodebb upgrade -sbi
 fi
 
 exec "$@"
