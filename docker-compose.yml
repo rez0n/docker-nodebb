@@ -31,6 +31,18 @@ services:
       - ./data/redis:/data
     networks:
       - nodebb
+      
+  # mongo:
+  #   image: mongo
+  #   restart: unless-stopped
+  #   environment:
+  #     MONGO_INITDB_DATABASE: nodebb
+  #     MONGO_INITDB_ROOT_USERNAME: mongo
+  #     MONGO_INITDB_ROOT_PASSWORD: mongo
+  #   volumes:
+  #     - ./mongo_init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+  #   networks:
+  #     - nodebb
 
 networks:
   nodebb:
