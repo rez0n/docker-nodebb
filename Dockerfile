@@ -1,4 +1,4 @@
-FROM node:10
+FROM node:12
 
 LABEL org.opencontainers.image.source https://github.com/rez0n/docker-nodebb
 
@@ -18,8 +18,6 @@ RUN wget https://github.com/NodeBB/NodeBB/archive/${RELEASE}.tar.gz -O nodebb.ta
     && cp install/package.json package.json \
     && npm install --only=prod \
     && npm cache clean --force
-
-COPY NodeBB/ /usr/src/app
 
 VOLUME /data
 COPY entrypoint.sh /entrypoint.sh
