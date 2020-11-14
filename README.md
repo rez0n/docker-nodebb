@@ -1,49 +1,88 @@
-# NodeBB in the Docker
-[NodeBB](https://github.com/NodeBB/NodeBB) forum software Docker container.
+# ![NodeBB](https://github.com/NodeBB/NodeBB/raw/master/public/images/logo.svg) in the Docker
+
+[**NodeBB Forum Software**](https://nodebb.org) is powered by Node.js and supports either Redis, MongoDB, or a PostgreSQL database. It utilizes web sockets for instant interactions and real-time notifications. NodeBB has many modern features out of the box such as social network integration and streaming discussions, while still making sure to be compatible with older browsers.
+
 ## Available tags
-`latest` - used for latest *stable* releases
+##### Stable releases
+`latest`, `v1.15.1`, `v1.15.0`, `v1.14.3`, `v1.14.2` ...
+##### Beta releases
+`beta`, `v1.15.1-beta.0`, `v1.15.0-rc.4`, `v1.15.0-rc.3`, `v1.15.0-beta.30` ...
 
-`beta` - *beta* releases builds
-
----
+*Images delivers through two registries, [DockerHub](https://hub.docker.com/r/nibrev/nodebb) and [GitHub Container Registry](https://github.com/users/rez0n/packages/container/package/nodebb).*
 
 ## Features
 * Auto installation
 * Auto upgrade when you update image
 * Persistant storage support (official NodeBB image haven't that)
 
----
 
-## How to run
+## Quick start 
 
 ### Run using Mongo database
 
-```
+```docker
 docker run --name nodebb -d -p 4567:4567 \
-    -v /path/to/data:/data \
+    -v ./data:/data \
     -e URL="http://mynodebb.com" \
     -e DATABASE="mongo" \
     -e DB_HOST="host.docker.internal" \
-    -e DB_USER="user" \
-    -e DB_PASSWORD="pass" \
+    -e DB_USER="mongo_user" \
+    -e DB_PASSWORD="mongo_pass" \
     -e DB_PORT="27017" \
-    nibrev/nodebb:stable
+    nibrev/nodebb:latest
 ```
 
 ### Run using Redis
 
-```
+```docker
 docker run --name nodebb -d -p 4567:4567 \
-    -v /path/to/data:/data \
-    -e URL="http://mynodebb.com" \
+    -v ./data:/data \
+    -e URL="http://localhost" \
     -e DATABASE="redis" \
     -e DB_NAME="0" \
     -e DB_HOST="host.docker.internal" \
-    -e DB_PASSWORD="pass" \
+    -e DB_PASSWORD="redis_pass" \
     -e DB_PORT="6379" \
-    nibrev/nodebb:stable
+    nibrev/nodebb:latest
 ```
----
+
+
+### Run using docker-compose
+There is basic docker-compose example to run NodeBB using Redis database.
+
+```yaml
+
+version: '3.1'
+services:
+  nodebb:
+    image: ghcr.io/rez0n/nodebb:latest
+    restart: unless-stopped
+    environment:
+      URL: "http://localhost"
+      DATABASE: "redis"
+      DB_NAME: "0"
+      DB_HOST: "redis"
+      DB_PORT: "6379"
+    volumes:
+      - ./data/nodebb:/data
+    networks:
+      - nodebb
+    ports:
+      - "4567:4567"
+
+  redis:
+    image: redis
+    restart: unless-stopped
+    volumes:
+      - ./data/redis:/data
+    networks:
+      - nodebb
+
+networks:
+  nodebb:
+    driver: bridge
+```
+
 
 ### Run in k8s
 This image was adjusted to run in k8s clusters. Example manifest below, you can find full manifests in the k8s-manifests directory.
